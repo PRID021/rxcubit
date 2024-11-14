@@ -1,7 +1,6 @@
+# reactive_cubit
 
-# rxbloc
-
-`rxbloc` is a state management package for Flutter applications, built using `rxdart` and `provider`. It simplifies managing and observing state with reactive streams.
+`reactive_cubit` is a state management package for Flutter applications, built using `rxdart` and `provider`. It simplifies managing and observing state with reactive streams.
 
 ## Features
 
@@ -17,15 +16,15 @@ To use this package in your Flutter project, add the following dependency in you
 
 ```yaml
 dependencies:
-  rxbloc: ^0.0.1
+  reactive_cubit: ^0.0.1
 ```
 
 ## Usage
 
-Here’s an example of how to use `rxbloc` in your application:
+Here’s an example of how to use `reactive_cubit` in your application:
 
 ```dart
-import 'package:rxbloc/rxbloc.dart';
+import 'package:reactive_cubit/reactive_cubit.dart';
 
 class CounterCubit extends RxCubit<int> {
   CounterCubit() : super(0);
