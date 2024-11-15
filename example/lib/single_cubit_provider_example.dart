@@ -36,9 +36,7 @@ class CounterState {
 
 class CounterCubit extends RxCubit<CounterState> {
   CounterCubit()
-      : super(
-          CounterState(count: 0, isEven: true, isLoading: false),
-        );
+      : super(CounterState(count: 0, isEven: true, isLoading: false));
 
   void increment() async {
     emit(state.copyWith(isLoading: true));
