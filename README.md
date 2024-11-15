@@ -43,7 +43,7 @@
 
 ![RxCubit Pattern](https://i0.wp.com/resocoder.com/wp-content/uploads/2020/07/cubit_architecture_full.png?w=800&ssl=1)
 
-## UI component sẽ truy xuất trực tiếp function của cubit thay vì tạo ra các `event` như bloc pattern, điều này giúp đơn giản hóa việc triển khai và đảm bảo hiệu xuất của ứng dụng, `state` sẽ được `emit` từ cubit, UI sẽ lắng nghe state và cập nhật trạng thái phù hợp.
+UI component sẽ truy xuất trực tiếp function của cubit thay vì tạo ra các `event` như bloc pattern, điều này giúp đơn giản hóa việc triển khai và đảm bảo hiệu xuất của ứng dụng, `state` sẽ được `emit` từ cubit, UI sẽ lắng nghe state và cập nhật trạng thái phù hợp.
 
 ## 4. Cách Triển Khai `RxCubit`
 
@@ -142,7 +142,7 @@ Với `RxCubit`, bạn đã xây dựng thành công một giải pháp quản l
 
 # `StateObserver`
 
-Lớp `StateObserver` được thiết kế để theo dõi vòng đời và thay đổi trạng thái của các đối tượng `RxCubit`. Nó cung cấp các phương thức để xử lý các sự kiện thay đổi trạng thái, lỗi, khởi tạo và hủy bỏ cubit.
+`StateObserver` được thiết kế để theo dõi vòng đời và thay đổi trạng thái của các đối tượng `RxCubit`. Nó cung cấp các phương thức để xử lý các sự kiện thay đổi trạng thái, lỗi, khởi tạo và hủy bỏ cubit.
 
 ### Các phương thức chính:
 
@@ -174,7 +174,59 @@ Lớp `StateObserver` được thiết kế để theo dõi vòng đời và tha
 - **Tham số**:
   - `cubit`: Đối tượng `RxCubit` đang bị hủy bỏ.
 
-# Ví Dụ Sử Dụng
+# `RxMessageCubit`
+
+`RxMessageCubit` kế thừa từ `RxCubit` giúp phân chia logic emit `message` (Khi muốn hiển thị dialog thông báo lỗi) và `state` (Dùng để cập nhật UI), bằng cách tách tường minh chúng ta có dễ dàng update ui, và hiển thị dialog một cách rõ ràng.
+
+#### `void sendMessage(M message)`
+
+- **Mục đích**: Emit một message tới UI.
+- **Tham số**:
+  - `message`: một instance message dựa trên generic type.
+
+#### Cách sử dụng
+
+- UI component
+
+```dart
+
+  late CounterMessageCubit cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = Provider.of<CounterMessageCubit>(context, listen: false);
+    // Listen to messageStream for notifications
+    cubit.messageStream.listen(_onMessage);
+  }
+
+  void _onMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+```
+
+-- RxCubit
+
+```dart
+
+  class CounterMessageCubit extends RxMessageCubit<int, String> {
+  CounterMessageCubit() : super(0);
+
+  void increment() {
+    emit(state + 1);  /// Emit state on state stream
+    sendMessage('Counter incremented to $state');  /// Emit message on message stream
+  }
+
+  void decrement() {
+    emit(state - 1);
+    sendMessage('Counter decremented to $state');
+  }
+}
+```
+
+# Sử Dụng
 
 Dưới đây là ví dụ đơn giản về cách sử dụng `RxCubit` trong một ứng dụng Flutter `main.dart`:
 
