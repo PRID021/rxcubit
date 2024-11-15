@@ -1,4 +1,4 @@
-# Tài Liệu và Giải Thích về `RxCubit`
+# Tài Liệu thiết kế  `RxCubit`
 
 ## 1. Mục Tiêu
 

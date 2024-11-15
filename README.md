@@ -1,4 +1,4 @@
-# Tài Liệu và Giải Thích về `RxCubit`
+# Tài Liệu Thiết kế `RxCubit`
 
 ## 1. Mục Tiêu
 
@@ -30,7 +30,7 @@
 
 ### a. Tổng Quan:
 
-`RxCubit` là một lớp quản lý state lấy cảm hứng từ `Cubit` pattern sử dụng `BehaviorSubject` từ package `rxdart` để quản lý state một cách hiệu quả. Thay vì phụ thuộc vào các package quản lý state phức tạp, `RxCubit` sử dụng stream (`BehaviorSubject`) để theo dõi và phát tán các thay đổi của state, giúp tối ưu hóa việc cập nhật UI.
+`RxCubit` lấy cảm hứng từ `Cubit` pattern sử dụng `BehaviorSubject` từ package `rxdart` để quản lý state một cách hiệu quả. Thay vì phụ thuộc vào các package quản lý state phức tạp, `RxCubit` sử dụng stream (`BehaviorSubject`) để theo dõi và phát tán các thay đổi của state, giúp tối ưu hóa việc cập nhật UI.
 
 ### b. Tại Sao `RxCubit` Hiệu Quả và Tối Ưu:
 
@@ -43,13 +43,9 @@
 
 ![RxCubit Pattern](https://i0.wp.com/resocoder.com/wp-content/uploads/2020/07/cubit_architecture_full.png?w=800&ssl=1)
 
-UI component sẽ truy xuất trực tiếp function của cubit thay vì tạo ra các `event` như bloc pattern, điều này giúp đơn giản hóa việc triển khai và đảm bảo hiệu xuất của ứng dụng, `state` sẽ được `emit` từ cubit, UI sẽ lắng nghe state và cập nhật trạng thái phù hợp.
----
+## UI component sẽ truy xuất trực tiếp function của cubit thay vì tạo ra các `event` như bloc pattern, điều này giúp đơn giản hóa việc triển khai và đảm bảo hiệu xuất của ứng dụng, `state` sẽ được `emit` từ cubit, UI sẽ lắng nghe state và cập nhật trạng thái phù hợp.
 
-
-## 4. Giải Thích Về Cách Triển Khai `RxCubit`
-
-Phân tích mã nguồn:
+## 4. Cách Triển Khai `RxCubit`
 
 ### a. Khởi Tạo Cubit
 
@@ -61,8 +57,6 @@ RxCubit(State initialState)
 }
 ```
 
-**Giải Thích**:
-
 - Khi khởi tạo `RxCubit`, `BehaviorSubject` được khởi tạo với giá trị state ban đầu.
 - `observer` tùy chọn có thể được sử dụng để theo dõi khi một cubit được tạo ra (hữu ích cho việc gỡ lỗi hoặc thống kê).
 
@@ -73,8 +67,6 @@ Stream<State> get stream =>
     _controller.stream.doOnListen(_onListen).doOnCancel(_onCancel);
 State get state => _controller.value;
 ```
-
-**Giải Thích**:
 
 - `stream`: Trả về stream của state với các hook để theo dõi số lượng listener bằng `doOnListen` và `doOnCancel`.
 - `state`: Trả về giá trị state hiện tại.
@@ -90,8 +82,6 @@ void emit(State newState) {
 }
 ```
 
-**Giải Thích**:
-
 - Phương thức `emit()` chỉ phát tán trạng thái mới nếu trạng thái đó khác với trạng thái hiện tại. Điều này ngăn chặn việc phát tán trạng thái không cần thiết và giảm thiểu việc render lại không cần thiết.
 
 ### d. Reset về State Ban Đầu
@@ -105,8 +95,6 @@ void reset() {
 }
 ```
 
-**Giải Thích**:
-
 - Phương thức `reset()` giúp đưa state trở lại giá trị ban đầu. Điều này hữu ích khi cần xóa hoặc làm mới state.
 
 ### e. Chọn Các Thuộc Tính Cụ Thể Của State
@@ -116,8 +104,6 @@ Stream<T> select<T>(T Function(State state) selector) {
   return stream.map(selector).distinct().skip(1);
 }
 ```
-
-**Giải Thích**:
 
 - Phương thức `select()` cho phép lắng nghe những phần cụ thể của state. Nó sử dụng `distinct()` để loại bỏ các thay đổi không cần thiết và bỏ qua giá trị đầu tiên khi widget được khởi tạo.
 
@@ -135,8 +121,6 @@ void _onCancel() {
   }
 }
 ```
-
-**Giải Thích**:
 
 - Theo dõi số lượng listeners đang hoạt động. Khi không còn listener nào, cubit sẽ tự động đóng để giải phóng tài nguyên, ngăn ngừa rò rỉ bộ nhớ.
 
@@ -156,7 +140,7 @@ Với `RxCubit`, bạn đã xây dựng thành công một giải pháp quản l
 
 ---
 
-# Tài liệu lớp `StateObserver`
+# `StateObserver`
 
 Lớp `StateObserver` được thiết kế để theo dõi vòng đời và thay đổi trạng thái của các đối tượng `RxCubit`. Nó cung cấp các phương thức để xử lý các sự kiện thay đổi trạng thái, lỗi, khởi tạo và hủy bỏ cubit.
 
