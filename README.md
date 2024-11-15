@@ -105,7 +105,7 @@ Stream<T> select<T>(T Function(State state) selector) {
 }
 ```
 
-- Phương thức `select()` cho phép lắng nghe những phần cụ thể của state. Nó sử dụng `distinct()` để loại bỏ các thay đổi không cần thiết và bỏ qua giá trị đầu tiên khi widget được khởi tạo.
+- Phương thức `select()` cho phép lắng nghe những phần cụ thể của state. Nó sử dụng `distinct()` để loại bỏ các thay đổi không cần thiết.
 
 ### f. Tự Động Đóng Stream
 
